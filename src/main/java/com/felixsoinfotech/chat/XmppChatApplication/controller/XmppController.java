@@ -19,6 +19,7 @@ package com.felixsoinfotech.chat.XmppChatApplication.controller;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,12 +41,16 @@ public class XmppController {
 	@Autowired
 	private XmppService xmppService;
 	
-	@PostMapping(value="/{sendMessage}")
+	@PostMapping(path="/sendMessage")
 	public void sendMessage() {
 		
 		xmppService.sendMessage();
 	}
 
+	@GetMapping(path="/getMessage")
+	public void getMessage(){
+		xmppService.getMessage();
+	}
 }
 
 

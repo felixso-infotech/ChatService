@@ -39,32 +39,30 @@ public class XmppConfiguration {
 	
 	private Logger logger = LoggerFactory.getLogger(XmppConfiguration.class);
 	
+	AbstractXMPPConnection connection;
+	
 	@Bean(name = "xmppConfig")
-	public void XmppConfig() {
-		XMPPTCPConnectionConfiguration config = null;
+	public AbstractXMPPConnection XmppConfig() {
 				
 		try {
-            config = XMPPTCPConnectionConfiguration.builder()
-            		.setUsernameAndPassword("anjalic","karma123")
+			XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
+            		.setUsernameAndPassword("anjali","karma123")
   				  .setXmppDomain("jabber.hot-chilli.net")
   				  .setHost("jabber.hot-chilli.net")
   				  .build();
 
-            AbstractXMPPConnection connection = new XMPPTCPConnection(config);
+            connection = new XMPPTCPConnection(config);
 
             connection.connect();
             connection.login();
             logger.info("*****host{}",connection.getHost());
-            
-            ChatManager chatManager = ChatManager.getInstanceFor(connection);
-
-            Chat chat = chatManager.chatWith(JidCreate.from("anjalic@jabber.hot-chilli.net").asEntityBareJidOrThrow());
-
-            chat.send("Hello!");
-
+             
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
+		
+		return connection;
 	}
+	
 
 }
