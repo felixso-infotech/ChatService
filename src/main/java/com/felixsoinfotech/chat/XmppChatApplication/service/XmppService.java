@@ -55,23 +55,28 @@ public class XmppService implements MessageListener  {
 	
 	private Message newMessage;
 	
+	private Chat chat;
+	
 	public void sendMessage() {
 		
 		chatManager = ChatManager.getInstanceFor(connection);
-		
-		logger.info("***chat{}",chatManager);
+		chatManager.addIncomingListener(new IncomingChatMessageListener() {
+			@Override
+			public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
+			    System.out.println("New message from " + from + ": " + message.getBody());
+			  }
+			});
 		
 		newMessage = new Message();
-		newMessage.setBody("heyy");
+		newMessage.setBody("haii");
 		
 		if(chatManager!=null) {
 		try {
 			
-			logger.info("*****inside tryy");
-			Chat newChat = chatManager.chatWith(JidCreate.from("anjali@jabber.hot-chilli.net").asEntityBareJidOrThrow());
+			chat = chatManager.chatWith(JidCreate.from("sanil@jabber.hot-chilli.net").asEntityBareJidOrThrow());
 
 		if (connection.isConnected()) {
-			newChat.send(newMessage.getBody());
+			chat.send(newMessage.getBody());
 			logger.info("message sent***{}",newMessage);
 		}
 		} catch (Exception e) {
@@ -85,47 +90,30 @@ public class XmppService implements MessageListener  {
 	}
 	
 	public void getMessage(){
-		try{
-			  logger.info("inside try");
-       	    
-			  //XMPPTCPConnection connection = null;
-			  
-			  chatManager = ChatManager.getInstanceFor(connection);
-			  logger.info("*****connection in get message{}",chatManager);
-			  
-			  logger.info("entitybarejid from{}",newMessage.getBody());
-			  
-			  //final EntityBareJid to = newMessage.getTo().asEntityBareJidOrThrow();
-			  final EntityBareJid from = newMessage.getFrom().asEntityBareJidOrThrow();
-	             
-			  
-			 chatManager.addIncomingListener(new IncomingChatMessageListener() {
-	        	  @Override
-	        	  public void newIncomingMessage(EntityBareJid from, Message newMessage, Chat chat) {
-	        	      System.out.println("New message from " + from + ": " + newMessage.getBody());
-	        	      logger.info("chat body{}",newMessage.getBody());
-	        	      
-	        	  }
-	        	});
-	         
+		try{ 
+			  chatManager = ChatManager.getInstanceFor(connection); 
+			  final EntityBareJid from = chat.getXmppAddressOfChatPartner();
+					
+			  newIncomingMessage(from,newMessage,chat);
+			    
 			}catch (Exception e) {
 	            logger.error(e.getMessage(), e);
 	        }
 			
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jivesoftware.smack.MessageListener#processMessage(org.jivesoftware.smack.packet.Message)
-	 */
-	@Override
-	public void processMessage(Message arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	 @Override
+	  	public void processMessage(Message newMessage) {
+	  		 if(newMessage.getType() == Message.Type.chat){
+	  			    logger.info(newMessage.getBody());
+	  		 }
+	  	}
+	 
+	 public void newIncomingMessage(EntityBareJid from, Message newMessage, Chat chat) {
+	     // System.out.println("New message from " + from + ": " + newMessage.getBody());
+	      logger.info("chat body{}",newMessage.getBody());
+	           
+	  }
 
-
-	
-
-	
 
 }
