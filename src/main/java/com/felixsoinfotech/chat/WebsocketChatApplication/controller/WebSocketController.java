@@ -34,7 +34,7 @@ public class WebSocketController {
     public void onReceivedMesage(@Payload Message message){
         //this.template.convertAndSend("/chat",  new SimpleDateFormat("HH:mm:ss").format(new Date())+"- "+message);
 		
-		logger.info("**********inside onReceivedMesage");
+		logger.info("**********inside onReceivedMesage{}",message);
 		/* SimpMessageHeaderAccessor headerAccessor = 
 	               SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
 		
