@@ -49,11 +49,11 @@ public class WebSocketController {
 		 if(username != null) {
 	            Message chatMessage = new Message();    
 	            chatMessage.setSender(username);
-	            this.template.convertAndSend("/chat",message);
+	            this.template.convertAndSend("/chat",message.getContent());
 	    		
 	        }
 			 */
-			this.template.convertAndSend("/chat",message);
+			this.template.convertAndSend("/chat",message.getContent());
    }
     
 }
